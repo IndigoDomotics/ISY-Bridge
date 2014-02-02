@@ -20,5 +20,5 @@ If you want to contribute, just clone the repository in your account, make your 
 
 Perceptive Automation is hosting this repository and will do minimal management. Unless a pull request has no description or upon cursory observation has some obvious issue, pull requests will be accepted without any testing by us. We may choose to delegate commit privledges to other users at some point in the future.
 
-We (Perceptive Automation) don't guarantee anything about this plugin - that this plugin works or does what the description above states, so use at your own risk. We will attempt to answer questions about the plugin but we can't help with the jailbreaking process or installing aTVFlash.
+We (Perceptive Automation) don't guarantee anything about this plugin - that this plugin works or does what the description above states, so use at your own risk. We will attempt to answer questions about the plugin but note that since we don't use it regularly we may not have the answers. We certainly can't really help with questions about your ISY.
 
