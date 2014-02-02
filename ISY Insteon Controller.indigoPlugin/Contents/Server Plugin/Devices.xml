@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<Devices>
+	<Device type="thermostat" id="ISYThermostat">
+		<Name>ISY Thermostat</Name>
+		<ConfigUI>
+			<Field type="checkbox" id="ShowCoolHeatEquipmentStateUI" defaultValue="true" hidden="true">
+				<Label/>
+				<Description/>
+			</Field>
+		</ConfigUI>
+		<States>
+			<State id="communicationError">
+				<ValueType>Boolean</ValueType>
+				<TriggerLabel>Communication Error</TriggerLabel>
+				<TriggerLabelPrefix>Communication Error changed to</TriggerLabelPrefix>
+				<ControlPageLabel>Communication Error</ControlPageLabel>
+				<ControlPageLabelPrefix>Communication Error is</ControlPageLabelPrefix>
+			</State>
+		</States>
+	</Device>	
+	<Device type="dimmer" id="ISYDimmer">
+		<Name>ISY Dimmer</Name>
+		<States>
+			<State id="communicationError">
+				<ValueType>Boolean</ValueType>
+				<TriggerLabel>Communication Error</TriggerLabel>
+				<TriggerLabelPrefix>Communication Error changed to</TriggerLabelPrefix>
+				<ControlPageLabel>Communication Error</ControlPageLabel>
+				<ControlPageLabelPrefix>Communication Error is</ControlPageLabelPrefix>
+			</State>
+		</States>
+	</Device>	
+	<Device type="relay" id="ISYRelay">
+		<Name>ISY Relay</Name>
+		<States>
+			<State id="communicationError">
+				<ValueType>Boolean</ValueType>
+				<TriggerLabel>Communication Error</TriggerLabel>
+				<TriggerLabelPrefix>Communication Error changed to</TriggerLabelPrefix>
+				<ControlPageLabel>Communication Error</ControlPageLabel>
+				<ControlPageLabelPrefix>Communication Error is</ControlPageLabelPrefix>
+			</State>
+		</States>
+	</Device>	
+	<Device type="relay" id="ISYIrrigation">
+		<Name>ISY Irrigation Device</Name>
+		<States>
+			<State id="communicationError">
+				<ValueType>Boolean</ValueType>
+				<TriggerLabel>Communication Error</TriggerLabel>
+				<TriggerLabelPrefix>Communication Error changed to</TriggerLabelPrefix>
+				<ControlPageLabel>Communication Error</ControlPageLabel>
+				<ControlPageLabelPrefix>Communication Error is</ControlPageLabelPrefix>
+			</State>
+		</States>
+	</Device>	
+	<Device type="relay" id="ISYIODevice">
+		<Name>ISY I/O Device</Name>
+		<States>
+			<State id="communicationError">
+				<ValueType>Boolean</ValueType>
+				<TriggerLabel>Communication Error</TriggerLabel>
+				<TriggerLabelPrefix>Communication Error changed to</TriggerLabelPrefix>
+				<ControlPageLabel>Communication Error</ControlPageLabel>
+				<ControlPageLabelPrefix>Communication Error is</ControlPageLabelPrefix>
+			</State>
+		</States>
+	</Device>	
+	<Device id="ISY" type="custom">
+		<Name>ISY Insteon Controller</Name>
+		<ConfigUI>
+			<Field id="ISYInfoList" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+		
+			<Field id="foundISY" type="checkbox" defaultValue="false" hidden="true">
+				<Label/>
+				<Description/>
+			</Field>
+			<Field id="ISYNotFound" type="label" visibleBindingId="ISYSelection" visibleBindingValue="[]" fontColor="red" fontSize="small">
+				<Label>No ISY controllers were found on the network.  Please check the network connections for the Indigo server and ISY, and then try finding the ISY again.</Label>
+			</Field>
+			<Field id="findISY" type="button">
+				<Label>If your ISY is not listed below:</Label>
+				<Title>Find ISY Again</Title>
+				<CallbackMethod>findISYButton</CallbackMethod>
+			</Field>
+			<Field id="ISYSelection" type="menu">
+				<Label>Select an ISY:</Label>
+				<List class="self" filter="" method="populateISYList" dynamicReload="true"/>
+			</Field>
+			<Field id="username" type="textfield" defaultValue="">
+				<Label>ISY Username:</Label>
+			</Field>
+			<Field id="password" type="textfield" defaultValue="" secure="true">
+				<Label>ISY Password:</Label>
+			</Field>
+			<Field id="authorization" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="address" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="ISYIP" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="ISYuuid" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="sid" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="seqnum" type="textfield" hidden="true">
+				<Label/>
+			</Field>
+			<Field id="initialLoadDone" type="checkbox" hidden="true" defaultValue="false">
+				<Label/>
+			</Field>
+		</ConfigUI>
+		<States>
+			<State id="connectionStatus" defaultValue="disconnected">
+				<ValueType>
+					<List>
+						<Option value="disconnected">disconnected</Option>
+						<Option value="connected">connected</Option>
+					</List>
+				</ValueType>
+				<TriggerLabel>Connection State changed</TriggerLabel>
+				<TriggerLabelPrefix>Connection State changed to</TriggerLabelPrefix>
+				<ControlPageLabel>Connection State</ControlPageLabel>
+				<ControlPageLabelPrefix>Connection State is</ControlPageLabelPrefix>
+			</State>
+			<State id="badNodesList" defaultValue="[]">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Bad Nodes List changed</TriggerLabel>
+				<TriggerLabelPrefix>Bad Nodes List changed to</TriggerLabelPrefix>
+				<ControlPageLabel>Bad Nodes List</ControlPageLabel>
+				<ControlPageLabelPrefix>Bad Nodes List</ControlPageLabelPrefix>
+			</State>
+		</States>
+		<UiDisplayStateId>connectionStatus</UiDisplayStateId>
+	</Device>
+</Devices>

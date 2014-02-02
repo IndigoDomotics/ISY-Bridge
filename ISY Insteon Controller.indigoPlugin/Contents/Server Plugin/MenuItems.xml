@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<MenuItems>
+	<MenuItem id="menu1">
+		<Name>Update ISY</Name>
+		<ConfigUI>
+			<Field id="ISYSelection" type="menu" defaultValue="">
+				<Label>Select an ISY:</Label>
+				<List class="indigo.devices" filter="self.ISY"/>
+			</Field>
+			<Field id="updateAll" type="button">
+				<Label/>
+				<Title>Update All</Title>
+				<CallbackMethod>updateAllFromMenu</CallbackMethod>
+			</Field>
+			<Field id="updateDevices" type="button">
+				<Label/>
+				<Title>Update Devices</Title>
+				<CallbackMethod>updateDevicesFromMenu</CallbackMethod>
+			</Field>
+			<Field id="updateScenes" type="button">
+				<Label/>
+				<Title>Update Scenes</Title>
+				<CallbackMethod>updateScenesFromMenu</CallbackMethod>
+			</Field>
+			<Field id="updatePrograms" type="button">
+				<Label/>
+				<Title>Update Programs</Title>
+				<CallbackMethod>updateProgramsFromMenu</CallbackMethod>
+			</Field>
+		</ConfigUI>
+	</MenuItem>
+</MenuItems>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<Events>
+	<Event id="programThenFinished">
+		<Name>Program Then Fork Finished</Name>
+		<ConfigUI>
+			<Field id="program" type="menu">
+				<Label>Select a Program:</Label>
+				<List class="self" filter="" method="populateProgramList"/>
+			</Field>
+		</ConfigUI>
+	</Event>
+	<Event id="programElseFinished">
+		<Name>Program Else Fork Finished</Name>
+		<ConfigUI>
+			<Field id="program" type="menu">
+				<Label>Select a Program:</Label>
+				<List class="self" filter="" method="populateProgramList"/>
+			</Field>
+		</ConfigUI>
+	</Event>
+</Events>

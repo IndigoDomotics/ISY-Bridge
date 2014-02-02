@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<PluginConfig>
+	<Field id="debug" type="checkbox" defaultValue="false">
+		<Label>Debugging On:</Label>
+		<Description/>
+	</Field>
+	<Field id="eventViewerLabel" type="label">
+		<Label>The Event Viewer setting determines whether, and how, information from the ISY Event Viewer is output to the Indigo log.  If Highlighted output is selected, the information will be output to the Indigo log in RED by designating it as a plugin error.</Label>
+	</Field>
+	<Field id="eventViewer" type="menu" defaultValue="none">
+		<Label>Event Viewer Output:</Label>
+		<List>
+			<Option value="none">No Output</Option>
+			<Option value="normal">Normal Output to Indigo Log</Option>
+			<Option value="highlight">Highlight Output to Indigo Log</Option>
+		</List>
+	</Field>
+</PluginConfig>

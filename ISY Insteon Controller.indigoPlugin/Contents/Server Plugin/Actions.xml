@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<Actions>
+	<Action id="sendSceneOn">
+		<Name>Send Scene On Command</Name>
+		<CallbackMethod>sendSceneOn</CallbackMethod>
+		<ConfigUI>
+			<Field id="scene" type="menu">
+				<Label>Select a Scene:</Label>
+				<List class="self" filter="" method="populateSceneList"/>
+			</Field>
+		</ConfigUI>
+	</Action>
+	<Action id="sendSceneOff">
+		<Name>Send Scene Off Command</Name>
+		<CallbackMethod>sendSceneOff</CallbackMethod>
+		<ConfigUI>
+			<Field id="scene" type="menu">
+				<Label>Select a Scene:</Label>
+				<List class="self" filter="" method="populateSceneList"/>
+			</Field>
+		</ConfigUI>
+	</Action>
+	<Action id="sendProgramCommand">
+		<Name>Send Program Command</Name>
+		<CallbackMethod>sendProgramCommand</CallbackMethod>
+		<ConfigUI>
+			<Field id="program" type="menu">
+				<Label>Select a Program:</Label>
+				<List class="self" filter="" method="populateProgramList"/>
+			</Field>
+			<Field id="command" type="menu">
+				<Label>Command to Send:</Label>
+				<List>
+					<Option value="run">Run</Option>
+					<Option value="runThen">Run Then</Option>
+					<Option value="runElse">Run Else</Option>
+					<Option value="enable">Enable</Option>
+					<Option value="disable">Disable</Option>
+				</List>
+			</Field>
+		</ConfigUI>
+	</Action>
+</Actions>
+
