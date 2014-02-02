@@ -10,7 +10,7 @@ Several fixes were made to the plugin to make it compatible (and, in fact, it re
 
 ##Downloading for use
 
-If you are a user and just want to download and install the plugin, click on the "Download Zip" button to the right and it will download the plugin and readme file to a folder in your Downloads directory called "ISY-Bridge". Once it's downloaded just open that folder and double-click on the "ISY Bridge.indigoPlugin" file to have the client install and enable it for you.
+If you are a user and just want to download and install the plugin, click on the "Download ZIP" button to the right and it will download the plugin and readme file to a folder in your Downloads directory called "ISY-Bridge". Once it's downloaded just open that folder and double-click on the "ISY Bridge.indigoPlugin" file to have the client install and enable it for you.
 
 ##Contributing
 
