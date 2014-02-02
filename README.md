@@ -24,6 +24,10 @@ The plugin also presents 3 actions: **Send Scene On Command**, **Send Scene Off 
 
 Currently supported device types are: *Dimmers*, *On/Off (relay) devices*, *Sprinklers*, *Thermostats*, and the *I/O Linc*. We've added an enhancement issue to expand that list but it'll have to be done by someone else.
 
+##Getting Help
+
+If you have questions, the best place to start is on the [ISY Bridge](http://www.perceptiveautomation.com/userforum/viewtopic.php?f=65&t=11475) plugin forum post on our forums.
+
 ##Contributing
 
 If you want to contribute, just clone the repository in your account, make your changes, and issue a pull request. Make sure that you describe the change you're making thoroughly - this will help the repository managers accept your request more quickly.
