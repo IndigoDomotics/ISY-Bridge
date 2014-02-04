@@ -271,7 +271,6 @@ class SubscriptionServer(object):
 			except:
 				nodeParts = node.split(' ')
 				if nodeParts[3] != '1':    # not currently handling secondary nodes (i.e., non-load buttons on keypadlinc)
-					self.debugLog("subscriptionServer.handleEvent: control: %s, action: %s" % (str(control), str(action)))
 					pass
 				elif node in self.badDevices:
 					if control == 'ST':   # if we are receiving state info on a bad device, it's no longer bad
