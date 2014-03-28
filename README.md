@@ -28,6 +28,12 @@ Currently supported device types are: *Dimmers*, *On/Off (relay) devices*, *Spri
 
 If you have questions, the best place to start is on the [ISY Bridge](http://www.perceptiveautomation.com/userforum/viewtopic.php?f=65&t=11475) plugin forum post on our forums.
 
+##Plugin ID
+
+Here's the plugin ID in case you need to programmatically restart the plugin:
+
+**Plugin ID**: com.indigodomo.opensource.isybridge
+
 ##Contributing
 
 If you want to contribute, just clone the repository in your account, make your changes, and issue a pull request. Make sure that you describe the change you're making thoroughly - this will help the repository managers accept your request more quickly.
