@@ -131,6 +131,8 @@
 	
 	<nodeCategory id="4" name="Irrigation">
 		<nodeSubCategory id="0" name="DEV_SCAT_COMPACTA_EZFLORA_SPRINKLER_CONTROLLER"/>
+		<nodeSubCategory id="16" name="DEV_SCAT_ZWAVE_RELAY"/>
+		<nodeSubCategory id="17" name="DEV_SCAT_ZWAVE_DIMMER"/>
 	</nodeCategory>
 	
 	<nodeCategory id="5" name="Climate">
