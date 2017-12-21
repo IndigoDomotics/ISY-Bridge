@@ -135,7 +135,19 @@ class SubscriptionServer(object):
 
 	def extractFromXML(self, xml, tag):
 		elementList = xml.getElementsByTagName(tag)
-		return elementList[0].toxml().replace('<' + tag + '>','').replace('</' + tag + '>','')
+		#element = elementList[0]
+		#return element.nodeValue
+		#return ''.join( [node.data for node in element.childNodes] )
+		#self.debugLog('jms/in extractFromXML here is xml and elementList[0]')
+		#self.debugLog(xml)
+		#self.debugLog(elementList[0])
+		#return elementList[0].toxml().replace('<' + tag + '>','').replace('</' + tag + '>','')
+		element = elementList[0].toxml()
+		#self.debugLog("element is: %s" % element)
+		start = element.find('>') + 1
+		end = element.rfind('<')
+		#self.debugLog('element [start:end] is %s' % element[start:end])
+		return element[start:end]
 		
 	def lostHeartbeat(self):
 		self.errorLog('Failed to receive heartbeat - lost connection with ISY: %s' % self.ISY.address)
@@ -178,6 +190,7 @@ class SubscriptionServer(object):
 					if '<Event' not in request.body:
 						self.errorLog('invalid request body: %s' % request.body)
 						continue
+					self.debugLog('<<--- startServer received ISY event %s' % request.body)
 					event = parseString(request.body).getElementsByTagName('Event')[0]
 					sid = event.getAttribute('sid')
 					if sid != self.sid:
@@ -236,10 +249,24 @@ class SubscriptionServer(object):
 		response = HttpResponse(conn)
 		self.debugLog('Unsubscribe Response: %d' % response.status)
 		conn.close()
-		
+
+# handleEvent:
+# This is the main worker routine that is called when an ISY event appears.
+# It peels off some common events (errors), then calls routines for all control
+# events (those that begin with _) and then has its own convoluted logic for
+# the device-specific events such as "ST" (status) that might show up.
+#/jms/171220
+	
 	def handleEvent(self, control, action, node, eventInfo):
 		self.debugLog('<<----called: handleEvent')
-		if control == 'ERR' or (control == '_3' and action == 'NE'):
+# The ERR seems to come from devices that are red in the ISY GUI
+# but work perfectly well anyway.  So I'm going to ignore ERR
+# and only accept _3 NE events.  May God have mercy on my soul./jms
+#		if control == 'ERR' or (control == '_3' and action == 'NE'):  # PREVIOUS CODE
+		if control == 'ERR': 
+			self.debugLog('IGNORED communications error %s %s %s %s' % (node, control, action, eventInfo))
+
+                elif (control == '_3' and action == 'NE'):
 			self.debugLog('Communication Error: %s %s %s %s' % (node, control, action, eventInfo))
 			# move the device to the bad list
  			if node in self.devices:
@@ -256,7 +283,20 @@ class SubscriptionServer(object):
 		
 		else:
 			try:
-				device = self.devices[node]
+				#self.debugLog('in handleEvent checkpoint 1')
+				#self.debugLog('   node is %s' % (node))
+				#self.debugLog('   dumping devices array')
+				#self.debugLog(str(self.devices))
+				#self.debugLog('   end of devices dump')
+# A problem here is that devices may show up which are not
+# in our devices array, either because we don't support them
+# or perhaps because they were added later.  Thus, if the device
+# is not in the devices dictionary, then simply ignore the event (debug log)/jms
+                                if node in self.devices: 
+					device = self.devices[node]
+				else:
+					self.debugLog('IGNORED event for device %s' % node)
+					return
 				if device.deviceTypeId in ['ISYRelay', 'ISYIrrigation', 'ISYIODevice']:
 					self.handleRelayEvent(device, control, action)
 					
@@ -283,15 +323,43 @@ class SubscriptionServer(object):
 					self.debugLog('No plugin device defined for node: %s control: %s action: %s eventInfo: %s' % (node, control, action, eventInfo))
 					self.plugin.undefinedDeviceDetected(node)
 
+# handleControlEvent:
+# This is called by handleEvent for all control events, which are defined as "events with a control beginning with _"
+# The code expects that the XML that comes over will ALWAYS have control, action, node, and eventInfo, although
+# it is not clear from the documentation if that is necessarily true.  
+#
+#         <xsd:complexType name="Event">
+#                <xsd:sequence>
+#                        <xsd:annotation>
+#                                <xsd:documentation>
+#                                        An XML structure with specific information for each event type
+#                                </xsd:documentation>
+#                        </xsd:annotation>
+#                        <xsd:element name="control" type="ue:EventTypes"/>
+#                        <xsd:element name="action" type="ue:EventActionTypes"/>
+#                        <xsd:element name="node" type="xsd:string"/>
+#                        <xsd:element name="eventInfo" type="xsd:string"/>
+#                </xsd:sequence>
+#
+# This is what the documentation says. 
+# /jms/171220
+
 	def handleControlEvent(self, control, action, node, eventInfo):
 		self.debugLog('<<----called: handleControlEvent')
+
+# Heart Beat: _0
+# (in this case, action is the number of seconds)
 		if control == '_0':
 			# ISY heartbeat
 			self.conn.send('beat')
  			self.heartbeatTimeout.cancel()
  			self.heartbeatTimeout = Timer(kHeartbeatTimeout, self.lostHeartbeat)
  			self.heartbeatTimeout.start()
+			self.debugLog('Rubatosis ... thump.thump ... thump.thump')
 
+# Trigger Events: 0 = event status; 1 = client should get status; 2 = key changed; 3 = info string; 4 = IR learn mode;
+#		  5 = schedule status changed; 6 = variable status changed; 7 = variable intialized;
+#		  8 = current program key
 		elif control == '_1':
 			if action == '0':
 				programXML = parseString('<prg>%s</prg>' % eventInfo)
@@ -320,7 +388,7 @@ class SubscriptionServer(object):
 
 #			elif action == '2':  # key changed - usage unclear - tbd
 			
-			elif action == '3':
+			elif action == '3':  # information event
 				# event viewer
 				self.plugin.pluginEventViewer(self.ISY, eventInfo)
 
@@ -337,13 +405,29 @@ class SubscriptionServer(object):
 			elif action == '7':
 				# variable initialized - ignored for now
 				pass
+
+			elif action == '8': 
+				# key - ignored for now/jms
+				self.debugLog('Ignoring ISY control event _1/_8 (key): eventInfo: %s' % (eventInfo))
 				
 			else:
-				self.errorLog('unhandled ISY control event node: %s control: %s action: %s eventInfo: %s' % (node, control, action, eventInfo))
+				self.errorLog('UNKNOWN ISY control _1 event for node: %s action: %s eventInfo: %s' % (node, action, eventInfo))
 
+# _2 = Driver specific events
+# Not really described in the manual other than "driver specific events."  Print/ignore
+# /jms/171220
 		elif control == '_2':
-			# driver specific events - ignored
-			pass
+			self.plugin.pluginEventViewer(self.ISY, 'IGNORED Driver specific _2 %s %s %s' % (node, action, eventInfo))
+
+# _3 = Node Changed/Updated
+# NN = node renamed; NR = node removed; ND = node added; MV = node moved into a scene; CL = link changed;
+# RG = removed from group; EN = enabled; PC = parent changed; PI = power info changed; DI = Device ID changed;
+# DP = device property changed; GN = group renamed; GR = group removed; GD = group added; FN = folder renamed;
+# FR = folder removed; FD = folder added; NE = Node Error (Communications Errors); CE = Node Error Cleared; 
+# SN = Discovering Nodes/Linking; SC = Discovery Complete; WR = network renamed; WH = Pending Device Operation;
+# WD = programming device; RV = Node Revised (UPB)
+# /jms
+
 			
  		elif control == '_3':
 
@@ -402,77 +486,158 @@ class SubscriptionServer(object):
 				pass
 				
 			else:			# actions other than the above fall through here to see which are relevant
-				self.errorLog('unhandled ISY control event node: %s control: %s action: %s eventInfo: %s' % (node, control, action, eventInfo))
+				self.errorLog('unhandled ISY control event: %s node: %s action: %s eventInfo: %s' % (control, node, action, eventInfo))
 
-		elif control == '_4':
-			# system config change - ignored for now
-			pass
-			
-		elif control == '_5':
-			# system status updated - ignored for now
-			pass
-			
-		elif control == '_6':
-			# internet access status - ignored for now
-			pass
+# _4 = System Config Updated Event
+# 1 = time cofig updated; 2 = NTP settings updated; 3 = notification settings updated;
+# 4 = NTP server communications error; 5 = Batch mode changed 1/on 0/off;
+# 6 = battery device write mode changed: 1/auto 0/manual
+# jms/171220
+                elif control == '_4':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED system config _4 %s %s %s' % (node, action, eventInfo))
 
-		elif control == '_7':
-			# system updating - ignored for now
-			pass
-			
-		elif control == '_8':
-			# security system event - ignored for now
-			pass
-			
-#		elif control == '_9':   # system alert event - not sure what this does, goes to error log for now
+# _5 = System Status Event
+# 0 = not busy; 1 = busy; 2 = completely idle; 4 = safe mode
+# Note that on "1" the system "might ignore commands."  We do get these,
+# but I am not sure if we care.  These are computers, and they should be queueing
+# events.  I guess if we see a lot of these then we should figure out if we
+# need to put in logic to handle them.
+#/jms/171220
+                elif control == '_5':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED system status _5 %s %s %s' % (node, action, eventInfo))
 
-		elif control == '_10':
-			# openADR and Flex Your Power events - ignored for now
-			pass
-			
-		elif control == '_11':
-			# climate events (requires weatherbug module on ISY) - ignored for now
-			pass
-			
-		elif control == '_12':
-			# AMI/SEP events (only applies to ISY Orchestrator series) - ignored for now
-			pass
-			
-		elif control == '_13':
-			# external energy monitoring events - ignored for now
-			pass
-			
-		elif control == '_14':
-			# ubp linker events - ignored for now
-			pass
-			
-		elif control == '_15':
-			# upb linker state - ignored for now
-			pass
-			
-		elif control == '_16':
-			# upb device status events - ignored for now
-			pass
-			
-		elif control == '_17':
-			# gas meter events (only applies to ISY Orchestrator series) - ignored for now
-			pass
-			
-		elif control == '_18':
-			# zigbee events (only applies to ISY Orchestrator series) - ignored for now
-			pass
-			
-		elif control == '_19':
-			# elk events (requires ISY Elk module) - ignored, use direct indigo/elk plugin
-			pass
+# _6 = Internet Access Event
+# 0 = disabled; 1 = enabled; 2 = failed
+#/jms/171220
+                elif control == '_6':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED internet access _6 %s %s %s' % (node, action, eventInfo))
+
+# _7 = System Progress Event
+# 1 = progress updated event; 2.x = device adder info/warn/error event
+#/jms/171220
+                elif control == '_7':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED system progress _7 %s %s %s' % (node, action, eventInfo))
+
+# _8 = Security System Event
+# 0 = disconnected; 1 = connected
+# DA = disarmed; AW = armed away; AS = armed stay; ASI = armed stay instant; AN = armed night
+# ANI = armed night instant; AV = armed vacation
+# I'm not going to do any alarm propagation from Indigo<->UDI since I don't have any,
+# but if you wanted to start the integration from UDI->Indigo, then this is where you'd probably
+# do a lot of the work.
+#/jms/171220
+                elif control == '_8':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED security event _8 %s %s %s' % (node, action, eventInfo))
+                        # security system event - ignored for now
+                        pass
+
+# _9 = System Alert Event
+# 1 = electricity peak demand; 2 = electricity max utilization; 3 = gas max utilization; 4 = water max utilization
+# "A programmable alert sent to clients to do as they wish: beep, change colors, do something else"
+# These all seem to have something to do with energy/utility usage
+# So I'm ignoring them.
+#/jms/171220
+                elif control == '_9':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED system alert _9 %s %s %s' % (node, action, eventInfo))
+
+# _10 = OpenADR event
+# Open Auto Demand/Reponse actions
+# Eventinfo structure holds: bPrice = base price; cPrice = current price
+# 1 = OpenADR connection; 2 = OpenADR status; 4 = Utilization Report (total/watts/voltage/current)
+# 5 = Error connecting to Flex Your Power; 6 = Flex Your Power (FYP) status
+# 8 = OpenADR 2.0 registration; 9 = OpenADR Report; 10 = OpenADR Opt (look in oadrobjs.xsd for more info)
+#/jms/172220
+                elif control == '_10':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED OpenADR event _10 %s %s %s' % (node, action, eventInfo))
+
+# _11 = Climate Events
+# There are a ton of these; all require some sort of plugin (weatherbug module on ISY)
+# 1 = Temp; 2 = Temp High; 3 = Temp Low; 4 = Feels Like; 5 = Temp Average
+# 6 = Humidity; 7 = Humidity Rate; 8 = Pressure; 9 = Pressure Rate; 10 = Dew Point
+# 11 = Wind Speed; 12 = Avg Wind Speed; 13 = Wind Direction; 14 = Avg Wind Direction;
+# 15 = Gust Speed; 16 = Gust Direction; 17 = Rain Today; 18 = Light; 19 = Light Rate
+# 20 = Rain Rate; 21 = Rain Rate Max; 22 = Evapotranspiration; 23 = Irrig. Reqt
+# 24 = Water Deficit Yesterday; 25 = Elevation; 26 = Coverage (see ClimateCoverage)
+# 27 = Intensity (see ClimateIntensity); 28 = Weather Condition (see ClimateWeatherCondition)
+# 29 = Cloud Condition (see ClimateCloudCondition) 30 = Avg Temp Tomorrow; 31 = High Temp Tomorrow
+# 32 = Low Temp Tomorrow; 33 = Humidity Tomorrow; 34 = Wind Speed Tomorrow; 35 = Gust Speed Tomorrow;
+# 36 = Rain Tomorrow; 37 = Snow tomorrow; 38 = Coverage Tomorrow; 39 = Intensity Tomorrow;
+# 40 = Weather Condition Tomorrow; 41 = Cloud Condition Tomorrow; 42 = 24 hr Avg Temp Forecast
+# 43 = 24 hr High Temp Forecast; 44 = 24 hr Low Temp Forecast; 45 = 24 hr Humidity Forecast;
+# 46 = 24 hr Rain Forecast; 27 = 24 hr Snow Forecast; 48 = 24 hr Coverage forecast; 49 = 24 hr Intensity Forecast
+# 50 = 24 hr Condition FOrecast; 51 = 24 hr Cloud Forecast; 100 = Last successfully polled and processed timestamp
+#/jms/171220
+                elif control == '_11':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED weather event _11 %s %s %s' % (node, action, eventInfo))
+
+# _12 = AMI Meter Events
+                elif control == '_12':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED AMI Meter _12 %s %s %s' % (node, action, eventInfo))
+
+# _13 = Electricity Monitor Events
+#  Eventinfo contains # of channels, report actions, and raw message from Brultech
+                elif control == '_13':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED Electricity Monitor _13 %s %s %s' % (node, action, eventInfo))
+
+# _14 = UPB Linker Events
+# 1 = status; 2 = pending stop find; 3 = pending cancel device add
+# _15 = UPB Adder Events
+# 1 = device status
+# _16 = UPB Status Event
+                elif control in ['_14', '_15', '_16']:
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED UPB Event %s %s %s %s' % (control, node, action, eventInfo))
+
+# _17 = Gas Meter Event
+                elif control == '_17':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED Gas Meter _17 %s %s %s' % (node, action, eventInfo))
+
+# _18 = Zigbee Event
+                elif control == '_18':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED Zigbee Action _18 %s %s %s' % (node, action, eventInfo))
+
+# _19 = ELK Events (actions and event info defined in elkobjs.xld)
+# These are ignored; if you want to do Elk, talk directly to the Indigo with the Elk
+#/jms/171220
+                elif control == '_19':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED ELK event _19 %s %s %s' % (node, action, eventInfo))
+
+# _20 = Device Linker events (defined in DeviceLinkerEventInfo)
+# Device Linker Events (1 = status; 2 = cleared)/jms
+                elif control == '_20':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED Device Linker _20 %s %s %s' % (node, action, eventInfo))
+                        # Not relevant to Indigo, so ignored
+
+# _21 = Z-Wave Events (actions and events defined in zwobjs.xsd)
+# Z-Wave Events.  These are Z wave events about the management of the network, so they are not
+# anything that we can propagate to/from the Indigo interface.  See Z-Wave API for 1.3 (System Status),
+# 2.1/2.2/2.3/2.4/2.5 (Discovery Inactive/Include/Exclude/Replicate/Learn),
+# 3.x.y General status and 4.x.y General Error.  Just ignore and log them.
+#/jms/171220
+                elif control == '_21':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED Zwave event _21 %s %s' % (action, eventInfo))
+
+# _22 = Billing Events (supported on ZS series.  Look in billobjs.xsd for information)
+# According to the docs, we should be getting these on a "normal" ISY but we are
+# and we're just going to log and ignore them all. /jms
+                elif control == '_22':
+                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED Billing Event _22 %s %s %s' % (node, action, eventInfo))
+
+# _23 = Portal Events (actions and event info defined in portal.xsd)
+                elif control == '_23':
+                        # don't propagate these to Indigo or log them
+                        pass
 
 		else:
-			self.errorLog('unhandled ISY control event control: %s action: %s eventInfo: %s' % (control, action, eventInfo))
+			self.errorLog('UNKNOWN ISY control event control: %s action: %s eventInfo: %s' % (control, action, eventInfo))
 
 	def handleRelayEvent(self, dev, control, action):
 		self.debugLog('<<----called: handleRelayEvent')
+# apparently,both 255 and 100 are legal for "on" for relay devices/jms.  At least
+# all I am seeing is 100. 
 		if control == 'ST':
 			if action == '255':
+				onOff = True
+			elif action == '100':
 				onOff = True
 			else:
 				onOff = False
@@ -482,8 +647,26 @@ class SubscriptionServer(object):
 		
 	def handleDimmerEvent(self, dev, control, action):
 		self.debugLog('<<----called: handleDimmerEvent')
+# we update the brightness based on the maximum, which is stored as a property of
+# the device, and which we set earlier, typically either 255 (X10/Insteon) or 100 (ZWave)
+# Indigo seems to automatically consider something with non-zero brightness as "ON," so
+# we don't have to also tell the Indigo that it is turned on.  
+# Note that "action" comes in as a string, so we have to mix strings, integers, and floats,
+# and come out with an integer.  No kidding./jms/171220
 		if control == 'ST':
-			dev.updateStateOnServer('brightnessLevel', int(action)*100/255)
+			maxBrightness = dev.pluginProps['ISYmaxBrightness']
+			#self.debugLog('handleDimmerEvent: dev maxBrightness is %d' % maxBrightness)
+			newBrightness = int( float(action) * (100./float(maxBrightness)) )
+			#self.debugLog('handleDimmerEvent: ST event new brightness %d' % newBrightness)
+                        dev.updateStateOnServer('brightnessLevel', newBrightness)
+		elif control == 'DON':
+			# ignoring action, although it is usually 100 here
+			# not sure how we tell Indigo what the brightness is, or if we even know./jms/171220
+			# possibly for future analysis and experimentation.
+			dev.updateStateOnServer('onOffState', True)
+		elif control == 'DOF':
+			# ignoring action, although is is usually 0 here
+			dev.updateStateOnServer('onOffState', False)
 		else:
 			self.errorLog('unhandled ISY dimmer event node %s control %s action %s' % (dev.address, control, action))
 

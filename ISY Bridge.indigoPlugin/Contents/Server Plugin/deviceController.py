@@ -132,6 +132,9 @@ class DeviceController(object):
 		file = urllib2.urlopen(req)
 		response = file.read()
 		file.close()
+		self.debugLog("jms/response from API is:")
+		self.debugLog(response)
+		self.debugLog("jms/--- end of response ---")
 		return response
 
 	def extractFromXML(self, xml, tag, attribute=None, value=None):
@@ -150,14 +153,41 @@ class DeviceController(object):
 		name = self.extractFromXML(device, 'name')
 		address = self.extractFromXML(device, 'address')
 		type = self.extractFromXML(device, 'type').split('.')
+		self.debugLog("jms/parseOneDevice flag: %s ; name %s ; address %s ; type %s" % (flag, name, address, type))
+# type is a 4-digit dotted code like 113.1.2.0.  The first # (called categoryID here) is a broad class
+# and the second number is a device type within this.  The third is version and the fourth is zero. 
+# from API manual: device category.device subcategory.version.reserved
 		categoryID = type[0]
 		subcategoryID = type[1]
+
+# If the category ID starts with 4, then this is (probably?) a ZWave device.  In that case,
+# we need to get the <devtype> element, and within the <devtype> element, we are only
+# really interested in the <cat> element.
+		if categoryID == '4':
+			self.debugLog('Family 4 device, extracting cat from devtype')
+			devtype = self.extractFromXML(device, 'devtype')
+			if devtype is None:
+				self.debugLog('Unable to extract Z-Wave devtype')
+			else:
+				self.debugLog('Z-Wave devtype is %s' % devtype)
+				devtypeXML = '<XML>' + devtype + '</XML>'
+				zwaveCategory = self.extractFromXML(parseString(devtypeXML), 'cat')
+
+			self.debugLog('Family 4 device Z-Wave Category is %s' % zwaveCategory)
 		
 		addressParts = address.split(' ')
-		if addressParts[3] != '1' and categoryID != '4':   # this isn't a primary node or irrigation node
-			return None					# only deal w/ root devices
+# address in the case of Insteon devices looks like an Insteon address,
+# for example FF 08 0D 1.  However, when the device is a ZWave device, the address
+# does not necessarily have sub-parts (for example, ZW004_1)
+#/jms
+# I just don't know what this line is really supposed to do,
+# and I think it is handled later on anyway in the huge case statement,
+# so I commented out the next two lines, as it doesn't work with ZWave./jms
+#		if addressParts[3] != '1' and categoryID != '4':   # this isn't a primary node or irrigation node
+#			return None					# only deal w/ root devices
+
 #		these are the only categories supported
-		if categoryID not in ['1', '2', '4', '5', '7']:    # tbd 16
+		if categoryID not in ['1', '2', '4', '5', '7', '113']:    # tbd 16
 			return None
 		# Removed the subcategory check - testing shows that subcategories have expanded since
 		# the plugin was originally written. The SDK hasn't been updated though so we also had
@@ -165,15 +195,32 @@ class DeviceController(object):
 		if categoryID == '1':
 			# insteon dimmable devices - includes all currently supported by ISY
 			deviceType = 'ISYDimmer'
+		elif categoryID == '113':
+			# jms/X10 emulation of Insteon dimmable device 
+			deviceType = 'ISYDimmer'
 		elif categoryID == '2':
 			# insteon switch/relay devices - includes all currently supported by ISY
 			deviceType = 'ISYRelay'
 		elif categoryID == '3':
 			# network bridges - not supported
 			return None
-		elif categoryID == '4' and int(subcategoryID) == 0:
+		elif categoryID == '4':
+			if int(subcategoryID) == 0:
 			# insteon irrigation devices - includes all currently supported by ISY
-			deviceType = 'ISYIrrigation'
+				deviceType = 'ISYIrrigation'
+			else:
+			# Zwave devices seem to be 4.16, 4.17 etc.  Let's just grab all others./jms
+			# BUT, we have to look at the category to decide what kind of device it is and whether
+			# we want to deal with it.  The list of category is in 4_family.xml and section 8.3
+			# of the Z-Wave Integration Developer's Manual.
+				if zwaveCategory in ['121']:
+					deviceType = 'ISYRelay'
+				elif zwaveCategory in ['134', '109']:
+					deviceType = 'ISYDimmer'
+				else:
+					self.debugLog('Z-Wave category unknown or unsupported; ignoring this device')
+					return None
+
 		elif categoryID == '5':
 			# insteon climate devices - currently only supports Venstar
 			deviceType = 'ISYThermostat'
@@ -197,6 +244,20 @@ class DeviceController(object):
 			return None
 		else:
 			return None
+#
+# determine the maximum brightness value for this device.  We should look at the uom and figure it out
+# from there, but that's a lot of code.  SO we will make the following assumptions:
+#	- all Insteon and X10 devices have a maximum brightness of 255
+#	- all ZWave devices have a maximum brightness of 100
+# Determine this value (by looking at the categoryID, 4 = Zwave, !4 = all else
+# and store it away as a property of the device called maxBrightness/jms
+# This will get stored as part of the dictionary of the device and then attached to maxBrightness
+#
+		if categoryID == '4':
+			maxBrightness = 100
+		else:
+			maxBrightness = 255
+
 		category = self.extractFromXML(self.deviceTypes, 'nodeCategory', 'id', categoryID)
 		subcategory = self.extractFromXML(category, 'nodeSubCategory', 'id', subcategoryID)
 		if subcategory:
@@ -204,7 +265,7 @@ class DeviceController(object):
 			description = string.capwords(description)
 		else:
 			description = "Unknown Device"
-		return {'name':name, 'address':address, 'type':deviceType, 'description':description, 'nodeType':flag}
+		return {'name':name, 'address':address, 'type':deviceType, 'description':description, 'nodeType':flag, 'maxBrightness':maxBrightness}
 
 	def getDevices(self, ISYIP, authorization):
 		deviceXML = parseString(self.sendRest(ISYIP, authorization, '/rest/nodes'))
@@ -257,12 +318,20 @@ class DeviceController(object):
 	######################
 	# Process action request from Indigo Server for relays and dimmers.
 	def deviceOn(self, ISYIP, authorization, address):
-		command = '/rest/nodes/%s/cmd/DON/255' % address.replace(' ', '%20')
+		command = '/rest/nodes/%s/cmd/DON' % address.replace(' ', '%20')
 		self.sendRest(ISYIP, authorization, command)
-		
-	def deviceSetBrightness(self, ISYIP, authorization, address, bright100):
-		bright255 = int(bright100 * 255/100)
-		command = '/rest/nodes/%s/cmd/DON/%s' % (addres.replace(' ', '%20'), str(bright255))
+
+# maxBrightness is passed in and says what "100%" is, typically either 100 or 255
+        def deviceOnDimmer(self, ISYIP, authorization, address, maxBrightness):
+                command = '/rest/nodes/%s/cmd/DON/%d' % (address.replace(' ', '%20'), maxBrightness)
+                self.sendRest(ISYIP, authorization, command)
+
+	
+# maxBrightness is passed in and says what "100%" is, typically either 100 or 255	
+	def deviceSetBrightness(self, ISYIP, authorization, address, bright100, maxBrightness):
+		bright255 = int(bright100 * maxBrightness/100)
+# changed "addres" to "address"/jms/171212
+		command = '/rest/nodes/%s/cmd/DON/%s' % (address.replace(' ', '%20'), str(bright255))
 		self.sendRest(ISYIP, authorization, command)
 
 	def deviceOff(self, ISYIP, authorization, address):
