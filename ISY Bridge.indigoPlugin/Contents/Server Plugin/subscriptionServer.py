@@ -499,12 +499,20 @@ class SubscriptionServer(object):
 # _5 = System Status Event
 # 0 = not busy; 1 = busy; 2 = completely idle; 4 = safe mode
 # Note that on "1" the system "might ignore commands."  We do get these,
-# but I am not sure if we care.  These are computers, and they should be queueing
-# events.  I guess if we see a lot of these then we should figure out if we
-# need to put in logic to handle them.
+# in fact we get a lot of them.  But they are immediately followed up 
+# by "0" events.  I suspect it takes more energy to generate the event than
+# to do whatever it is that it's busy doing.  In any case, I am not going
+# to print these out (except in debug logs) because there are a lot of them
+# and they will just be confusing to anyone trying to read the logs.
+# I will print out the other _5 events, although I haven't seen them yet.
 #/jms/171220
                 elif control == '_5':
-                        self.plugin.pluginEventViewer(self.ISY, 'IGNORED system status _5 %s %s %s' % (node, action, eventInfo))
+			if action == '0':
+				self.debugLog('Ignoring ISY not busy event _5/_0')
+			elif action == '1':
+				self.debugLog('Ignoring ISY     busy event _5/_1')
+			else:
+                        	self.plugin.pluginEventViewer(self.ISY, 'IGNORED system status _5 %s %s %s' % (node, action, eventInfo))
 
 # _6 = Internet Access Event
 # 0 = disabled; 1 = enabled; 2 = failed
