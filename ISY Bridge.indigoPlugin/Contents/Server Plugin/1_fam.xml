@@ -16,104 +16,126 @@
 		<nodeSubCategory id="17" name="DEV_SCAT_REMOTE_LINC_2_SWITCH"/>
 		<nodeSubCategory id="18" name="DEV_SCAT_REMOTE_LINC_2_KEYPAD_8"/>
 	</nodeCategory>
-	
+
+<!-- Updated category 1 to match ISY current info/jms/171220 -->	
 	<nodeCategory id="1" name="Dimmable Devices">
-		<nodeSubCategory id="0" name="DEV_SCAT_LAMPLINC_V2_2456D3"/>
-		<nodeSubCategory id="1" name="DEV_SCAT_SWITCHLINC_V2_DIMMER_2476D"/>
-		<nodeSubCategory id="2" name="DEV_SCAT_INLINE_DIMMABLE"/>
-		<nodeSubCategory id="3" name="DEV_SCAT_ICON_SWITCH_DIMMER_2876D3"/>
-		<nodeSubCategory id="4" name="DEV_SCAT_SWITCHLINK_V2_DIMMER_2476DH"/>
-		<nodeSubCategory id="5" name="DEV_SCAT_KEYPADLINC_TIMER_2484DWH8"/>
-		<nodeSubCategory id="6" name="DEV_SCAT_LAMPLINC_2_PIN"/>
-		<nodeSubCategory id="7" name="DEV_SCAT_ICON_LAMPLINC_V2_2_PIN_2456D2"/>
-		<nodeSubCategory id="9" name="DEV_SCAT_KEYPADLINC_DIMMER_2486D"/>
-		<nodeSubCategory id="10" name="DEV_SCAT_ICON_INWALL_CONTROLLER_2886D"/>
-		<nodeSubCategory id="11" name="DEV_SCAT_LAMPLINC_BI_PHY"/>
-		<nodeSubCategory id="12" name="DEV_SCAT_KEYPADLINC_DIMMER_2486DWH8"/>
-		<nodeSubCategory id="13" name="DEV_SCAT_SOCKETLINC_2454D"/>
-		<nodeSubCategory id="14" name="DEV_SCAT_BIPHY_LAMPLINC_B2457D2"/>
-		<nodeSubCategory id="19" name="DEV_SCAT_ICON_SWITCHLINC_DIMMER_BELL_CANADA"/>
-		<nodeSubCategory id="23" name="DEV_SCAT_TOGGLELINC_DIMMER_2466D"/>
-		<nodeSubCategory id="24" name="DEV_SCAT_COMPANION_SWITCH_2474D"/>
-		<nodeSubCategory id="25" name="DEV_SCAT_SWITCHLINC_DIMMER_W_SENSE_2476D"/>
-		<nodeSubCategory id="26" name="DEV_SCAT_INLINELINC_DIMMER_2475D"/>
-		<nodeSubCategory id="27" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2486D_6"/>
-		<nodeSubCategory id="28" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2486D_8"/>
-		<nodeSubCategory id="29" name="DEV_SCAT_SWITCH_LINC_DIMMER_2476DH"/>
-		<nodeSubCategory id="30" name="DEV_SCAT_ICON_SWITCH_DIMMER_2876DB"/>
-		<nodeSubCategory id="31" name="DEV_SCAT_TOGGLELINC_DIMMER_2466D_2"/>
-		<nodeSubCategory id="32" name="DEV_SCAT_SWITCHLINC_DIMMER_2477D"/>
-		<nodeSubCategory id="33" name="DEV_SCAT_OUTLETLINC_DIMMER_2472D_DUAL_BAND"/>
-		<nodeSubCategory id="34" name="DEV_SCAT_LAMPLINC_2_PIN_DIMMER_2457D2X"/>
-		<nodeSubCategory id="36" name="DEV_SCAT_SWITCHLINC_DIMMER_2WIRE_2474DWH"/>
-		<nodeSubCategory id="39" name="DEV_SCAT_SWITCHLINC_DIMMER_2477D_SP"/>
-		<nodeSubCategory id="41" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2486D_8_SP"/>
-		<nodeSubCategory id="42" name="DEV_SCAT_LAMPLINC_2_PIN_DIMMER_2457D2X_SP"/>
-		<nodeSubCategory id="43" name="DEV_SCAT_SWITCHLINC_DIMMER_2477DH_SP"/>
-		<nodeSubCategory id="44" name="DEV_SCAT_INLINELINC_DIMMER_2475D_SP"/>
-		<nodeSubCategory id="45" name="DEV_SCAT_SWITCHLINC_DIMMER_2477DH"/>
-		<nodeSubCategory id="46" name="DEV_SCAT_FANLINC_2475F"/>
-		<nodeSubCategory id="48" name="DEV_SCAT_SWITCHLINC_DIMMER_2476D"/>
-		<nodeSubCategory id="49" name="DEV_SCAT_SWITCHLINC_DIMMER_2478D"/>
-		<nodeSubCategory id="50" name="DEV_SCAT_INLINELINC_DIMMER_2475DA1"/>
-		<nodeSubCategory id="58" name="DEV_SCAT_LED_BULB_8WATT_2672_222"/>
-		<!-- Global Line -->
-		<nodeSubCategory id="52" name="DEV_SCAT_DIN_RAIL_DIMMER_2452_222"/>
-		<nodeSubCategory id="54" name="DEV_SCAT_DIN_RAIL_DIMMER_2452_422"/>
-		<nodeSubCategory id="55" name="DEV_SCAT_DIN_RAIL_DIMMER_2452_522"/>
-		
-		<nodeSubCategory id="53" name="DEV_SCAT_MICRO_MODULE_DIMMER_2442_222"/>
-		<nodeSubCategory id="56" name="DEV_SCAT_MICRO_MODULE_DIMMER_2442_422"/>
-		<nodeSubCategory id="57" name="DEV_SCAT_MICRO_MODULE_DIMMER_2442_522"/>
+                <nodeSubCategory id="0" name="DEV_SCAT_LAMPLINC_V2_2456D3"/>
+                <nodeSubCategory id="1" name="DEV_SCAT_SWITCHLINC_V2_DIMMER_2476D"/>
+                <nodeSubCategory id="2" name="DEV_SCAT_INLINE_DIMMABLE"/>
+                <nodeSubCategory id="3" name="DEV_SCAT_ICON_SWITCH_DIMMER_2876D3"/>
+                <nodeSubCategory id="4" name="DEV_SCAT_SWITCHLINK_V2_DIMMER_2476DH"/>
+                <nodeSubCategory id="5" name="DEV_SCAT_KEYPADLINC_TIMER_2484DWH8"/>
+                <nodeSubCategory id="6" name="DEV_SCAT_LAMPLINC_2_PIN"/>
+                <nodeSubCategory id="7" name="DEV_SCAT_ICON_LAMPLINC_V2_2_PIN_2456D2"/>
+                <nodeSubCategory id="9" name="DEV_SCAT_KEYPADLINC_DIMMER_2486D"/>
+                <nodeSubCategory id="10" name="DEV_SCAT_ICON_INWALL_CONTROLLER_2886D"/>
+                <nodeSubCategory id="11" name="DEV_SCAT_LAMPLINC_BI_PHY"/>
+                <nodeSubCategory id="12" name="DEV_SCAT_KEYPADLINC_DIMMER_2486DWH8"/>
+                <nodeSubCategory id="13" name="DEV_SCAT_SOCKETLINC_2454D"/>
+                <nodeSubCategory id="14" name="DEV_CAT_BIPHY_LAMPLINC_B2457D2"/>
+                <nodeSubCategory id="19" name="DEV_SCAT_ICON_SWITCHLINC_DIMMER_BELL_CANADA"/>
+                <nodeSubCategory id="23" name="DEV_SCAT_TOGGLELINC_DIMMER_2466D"/>
+                <nodeSubCategory id="24" name="DEV_SCAT_COMPANION_SWITCH_2474D"/>
+                <nodeSubCategory id="25" name="DEV_SCAT_SWITCHLINC_DIMMER_W_SENSE_2476D"/>
+                <nodeSubCategory id="26" name="DEV_SCAT_INLINELINC_DIMMER_2475D"/>
+                <nodeSubCategory id="27" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2486D_6"/>
+                <nodeSubCategory id="28" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2486D_8"/>
+                <nodeSubCategory id="29" name="DEV_SCAT_SWITCH_LINC_DIMMER_2476DH"/>
+                <nodeSubCategory id="30" name="DEV_SCAT_ICON_SWITCH_DIMMER_2876DB"/>
+                <nodeSubCategory id="31" name="DEV_SCAT_TOGGLELINC_DIMMER_2466D_2"/>
+                <nodeSubCategory id="32" name="DEV_SCAT_SWITCHLINC_DIMMER_2477D"/>
+                <nodeSubCategory id="33" name="DEV_SCAT_OUTLETLINC_DIMMER_2472D_DUAL_BAND"/>
+                <nodeSubCategory id="34" name="DEV_SCAT_LAMPLINC_2_PIN_DIMMER_2457D2X"/>
+                <nodeSubCategory id="36" name="DEV_SCAT_SWITCHLINC_DIMMER_2WIRE_2474DWH"/>
+                <nodeSubCategory id="37" name="DEV_SCAT_BALLAST_DIMMER_2475DA2"/>
+                <nodeSubCategory id="39" name="DEV_SCAT_SWITCHLINC_DIMMER_2477D_SP"/>
+                <nodeSubCategory id="41" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2486D_8_SP"/>
+                <nodeSubCategory id="42" name="DEV_SCAT_LAMPLINC_2_PIN_DIMMER_2457D2X_SP"/>
+                <nodeSubCategory id="43" name="DEV_SCAT_SWITCHLINC_DIMMER_2477DH_SP"/>
+                <nodeSubCategory id="44" name="DEV_SCAT_INLINELINC_DIMMER_2475D_SP"/>
+                <nodeSubCategory id="45" name="DEV_SCAT_SWITCHLINC_DIMMER_2477DH"/>
+                <nodeSubCategory id="46" name="DEV_SCAT_FANLINC_2475F"/>
+                <nodeSubCategory id="48" name="DEV_SCAT_SWITCHLINC_DIMMER_2476D"/>
+                <nodeSubCategory id="49" name="DEV_SCAT_SWITCHLINC_DIMMER_2478D"/>
+                <nodeSubCategory id="50" name="DEV_SCAT_INLINELINC_DIMMER_2475DA1"/>
+                <nodeSubCategory id="58" name="DEV_SCAT_LED_BULB_8WATT_2672_222"/>
+                <nodeSubCategory id="73" name="DEV_SCAT_LED_BULB_12WATT_PAR38_2674_222"/>
+                <!-- Global Line -->
+                <nodeSubCategory id="52" name="DEV_SCAT_DIN_RAIL_DIMMER_2452_222"/>
+                <nodeSubCategory id="54" name="DEV_SCAT_DIN_RAIL_DIMMER_2452_422"/>
+                <nodeSubCategory id="55" name="DEV_SCAT_DIN_RAIL_DIMMER_2452_522"/>
+
+                <nodeSubCategory id="53" name="DEV_SCAT_MICRO_MODULE_DIMMER_2442_222"/>
+                <nodeSubCategory id="56" name="DEV_SCAT_MICRO_MODULE_DIMMER_2442_422"/>
+                <nodeSubCategory id="57" name="DEV_SCAT_MICRO_MODULE_DIMMER_2442_522"/>
+
+                <nodeSubCategory id="11" name="DEV_SCAT_PLUGIN_DIMMER_2632_422"/>
+                <nodeSubCategory id="15" name="DEV_SCAT_PLUGIN_DIMMER_2632_432"/>
+                <nodeSubCategory id="17" name="DEV_SCAT_PLUGIN_DIMMER_2632_442"/>
+                <nodeSubCategory id="18" name="DEV_SCAT_PLUGIN_DIMMER_2632_522"/>
+
+                <!--  U.S. -->
+                <nodeSubCategory id="65" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2334_2_8_BUTTON"/>
+                <nodeSubCategory id="66" name="DEV_SCAT_KEYPAD_LINC_DIMMER_2334_2_5_BUTTON"/>
 	</nodeCategory>
-	
+
+<!-- Updated category 2 to match ISY current info/jms/171220 -->	
 	<nodeCategory id="2" name="Switched/Relay Devices">
-		<nodeSubCategory id="5" name="DEV_SCAT_KEYPADLINC_RELAY_2486SWH8"/>
-		<nodeSubCategory id="6" name="DEV_SCAT_APPLIANCELINC_OUTDOOR_2456S3E"/>
-		<nodeSubCategory id="7" name="DEV_SCAT_TIMERLINC_2456S3T"/>
-		<nodeSubCategory id="8" name="DEV_SCAT_OUTLETLINC_2473"/>
-		<nodeSubCategory id="9" name="DEV_SCAT_APPLIANCELINC_2456S3"/>
-		<nodeSubCategory id="10" name="DEV_SCAT_SWITCHLINC_RELAY_2476S"/>
-		<nodeSubCategory id="11" name="DEV_SCAT_ICON_ON_OFF_SWITCH_2876S"/>
-		<nodeSubCategory id="12" name="DEV_SCAT_ICON_APPLIANCE_ADAPTER_2856S3"/>
-		<nodeSubCategory id="13" name="DEV_SCAT_TOGGLELINC_RELAY_2466S"/>
-		<nodeSubCategory id="14" name="DEV_SCAT_SWITCHLINC_RELAY_2476S_2"/>
-		<nodeSubCategory id="15" name="DEV_SCAT_KEYPADLINC_RELAY_2486S"/>
-		<nodeSubCategory id="16" name="DEV_SCAT_INLINE_RELAY"/>
-		<nodeSubCategory id="17" name="DEV_SCAT_EZSWITCH_30"/>
-		<nodeSubCategory id="18" name="DEV_SCAT_COMPANION_SWITCH_2474S"/>
-		<nodeSubCategory id="19" name="DEV_SCAT_ICON_SWTICHLINC_RELAY_BELL_CANADA"/>
-		<nodeSubCategory id="20" name="DEV_SCAT_INLINE_RELAY_WITH_SENSE"/>
-		<nodeSubCategory id="21" name="DEV_SCAT_SWITCHLINC_RELAY_W_SENSE_2476S"/>
-		<nodeSubCategory id="22" name="DEV_SCAT_ICON_RELAY_2876SB"/>
-		<nodeSubCategory id="23" name="DEV_SCAT_ICON_APPLIANCELINC_2856S3B"/>
-		<nodeSubCategory id="24" name="DEV_SCAT_SWITCHLINC_RELAY_2494S220"/>
-		<nodeSubCategory id="25" name="DEV_SCAT_SWITCHLINC_RELAY_2494S220_B"/>
-		<nodeSubCategory id="26" name="DEV_SCAT_TOGGLELINC_RELAY_2466S_2"/>
-		<nodeSubCategory id="28" name="DEV_SCAT_SWITCHLINC_RELAY_REMOTE_CONTROL_2476S"/>
-		<nodeSubCategory id="30" name="DEV_SCAT_KEYPADLINC_RELAY_2487S"/>
-		<nodeSubCategory id="31" name="DEV_SCAT_INLINELINC_RELAY_DUALBAND_2475SDB"/>
-		<nodeSubCategory id="32" name="DEV_SCAT_KEYPADLINC_RELAY_2486S_SP"/>
-		<nodeSubCategory id="33" name="DEV_SCAT_OUTLETLINC_2473_SP"/>
-		<nodeSubCategory id="34" name="DEV_SCAT_INLINE_RELAY_SP"/>
-		<nodeSubCategory id="35" name="DEV_SCAT_SWITCHLINC_RELAY_2476S_SP"/>
-		<nodeSubCategory id="37" name="DEV_SCAT_KEYPADLINC_TIMER_RELAY_2484SWH8"/>
-		<nodeSubCategory id="41" name="DEV_SCAT_SWITCHLINC_RELAY_COUNTDOWN_TIMER_2476ST"/>
-		<nodeSubCategory id="42" name="DEV_SCAT_SWITCHLINC_RELAY_DUAL_BAND_2477S"/>
-		<nodeSubCategory id="44" name="DEV_SCAT_KEYPADLINC_DUAL_BAND_RELAY_2487S"/>
-		
-		<!-- Global Line -->
-		<nodeSubCategory id="46" name="DEV_SCAT_DIN_RAIL_RELAY_2453_222"/>
-		<nodeSubCategory id="51" name="DEV_SCAT_DIN_RAIL_RELAY_2453_422"/>
-		<nodeSubCategory id="52" name="DEV_SCAT_DIN_RAIL_RELAY_2453_522"/>
-		
-		<nodeSubCategory id="47" name="DEV_SCAT_MICRO_MODULE_RELAY_2443_222"/>
-		<nodeSubCategory id="49" name="DEV_SCAT_MICRO_MODULE_RELAY_2443_422"/>
-		<nodeSubCategory id="50" name="DEV_SCAT_MICRO_MODULE_RELAY_2443_522"/>
-		
-		<!-- End: Global Line -->
-		<nodeSubCategory id="56" name="DEV_SCAT_ON_OFF_OUTDOOR_MODULE_2634_222"/>
-		
+                <nodeSubCategory id="5" name="DEV_SCAT_KEYPADLINC_RELAY_2486SWH8"/>
+                <nodeSubCategory id="6" name="DEV_SCAT_APPLIANCELINC_OUTDOOR_2456S3E"/>
+                <nodeSubCategory id="7" name="DEV_SCAT_TIMERLINC_2456S3T"/>
+                <nodeSubCategory id="8" name="DEV_SCAT_OUTLETLINC_2473"/>
+                <nodeSubCategory id="9" name="DEV_SCAT_APPLIANCELINC_2456S3"/>
+                <nodeSubCategory id="10" name="DEV_SCAT_SWITCHLINC_RELAY_2476S"/>
+                <nodeSubCategory id="11" name="DEV_SCAT_ICON_ON_OFF_SWITCH_2876S"/>
+                <nodeSubCategory id="12" name="DEV_SCAT_ICON_APPLIANCE_ADAPTER_2856S3"/>
+                <nodeSubCategory id="13" name="DEV_SCAT_TOGGLELINC_RELAY_2466S"/>
+                <nodeSubCategory id="14" name="DEV_SCAT_SWITCHLINC_RELAY_2476S_2"/>
+                <nodeSubCategory id="15" name="DEV_SCAT_KEYPADLINC_RELAY_2486S"/>
+                <nodeSubCategory id="16" name="DEV_SCAT_INLINE_RELAY"/>
+                <nodeSubCategory id="17" name="DEV_SCAT_EZSWITCH_30"/>
+                <nodeSubCategory id="18" name="DEV_SCAT_COMPANION_SWITCH_2474S"/>
+                <nodeSubCategory id="19" name="DEV_SCAT_ICON_SWTICHLINC_RELAY_BELL_CANADA"/>
+                <nodeSubCategory id="20" name="DEV_SCAT_INLINE_RELAY_WITH_SENSE"/>
+                <nodeSubCategory id="21" name="DEV_SCAT_SWITCHLINC_RELAY_W_SENSE_2476S"/>
+                <nodeSubCategory id="22" name="DEV_SCAT_ICON_RELAY_2876SB"/>
+                <nodeSubCategory id="23" name="DEV_SCAT_ICON_APPLIANCELINC_2856S3B"/>
+                <nodeSubCategory id="24" name="DEV_SCAT_SWITCHLINC_RELAY_2494S220"/>
+                <nodeSubCategory id="25" name="DEV_SCAT_SWITCHLINC_RELAY_2494S220_B"/>
+                <nodeSubCategory id="26" name="DEV_SCAT_TOGGLELINC_RELAY_2466S_2"/>
+                <nodeSubCategory id="28" name="DEV_SCAT_SWITCHLINC_RELAY_REMOTE_CONTROL_2476S"/>
+                <nodeSubCategory id="30" name="DEV_SCAT_KEYPADLINC_RELAY_2487S"/>
+                <nodeSubCategory id="31" name="DEV_SCAT_INLINELINC_RELAY_DUALBAND_2475SDB"/>
+                <nodeSubCategory id="37" name="DEV_SCAT_KEYPADLINC_TIMER_RELAY_2484SWH8"/>
+                <nodeSubCategory id="41" name="DEV_SCAT_SWITCHLINC_RELAY_COUNTDOWN_TIMER_2476ST"/>
+                <nodeSubCategory id="42" name="DEV_SCAT_SWITCHLINC_RELAY_DUAL_BAND_2477S"/>
+                <nodeSubCategory id="44" name="DEV_SCAT_KEYPADLINC_DUAL_BAND_RELAY_2487S"/>
+                <nodeSubCategory id="55" name="DEV_SCAT_ON_OFF_MODULE_2635_222"/>
+                <nodeSubCategory id="57" name="DEV_SCAT_ON_OFF_2663_222"/>
+                <nodeSubCategory id="59" name="DEV_SCAT_ON_OFF_OUTDOOR_MODULE_2634_222"/>
+
+                <!-- Pro Series -->
+                <nodeSubCategory id="32" name="DEV_SCAT_KEYPADLINC_RELAY_2486S_SP"/>
+                <nodeSubCategory id="33" name="DEV_SCAT_OUTLETLINC_2473_SP"/>
+                <nodeSubCategory id="34" name="DEV_SCAT_INLINE_RELAY_SP"/>
+                <nodeSubCategory id="35" name="DEV_SCAT_SWITCHLINC_RELAY_2476S_SP"/>
+
+                <!-- Global Line -->
+                <nodeSubCategory id="46" name="DEV_SCAT_DIN_RAIL_RELAY_2453_222"/>
+                <nodeSubCategory id="51" name="DEV_SCAT_DIN_RAIL_RELAY_2453_422"/>
+                <nodeSubCategory id="52" name="DEV_SCAT_DIN_RAIL_RELAY_2453_522"/>
+
+                <nodeSubCategory id="47" name="DEV_SCAT_MICRO_MODULE_RELAY_2443_222"/>
+                <nodeSubCategory id="49" name="DEV_SCAT_MICRO_MODULE_RELAY_2443_422"/>
+                <nodeSubCategory id="50" name="DEV_SCAT_MICRO_MODULE_RELAY_2443_522"/>
+
+                <nodeSubCategory id="45" name="DEV_SCAT_PLUGIN_RELAY_2633_422"/>
+                <nodeSubCategory id="48" name="DEV_SCAT_PLUGIN_RELAY_2633_432"/>
+                <nodeSubCategory id="53" name="DEV_SCAT_PLUGIN_RELAY_2633_442"/>
+                <nodeSubCategory id="54" name="DEV_SCAT_PLUGIN_RELAY_2633_522"/>
+
+                <!-- End: Global Line -->
+                <nodeSubCategory id="56" name="DEV_SCAT_ON_OFF_OUTDOOR_MODULE_2634_222"/>
 	</nodeCategory>
 	
 	<nodeCategory id="3" name="Network Bridge">
@@ -128,39 +150,62 @@
 		<nodeSubCategory id="13" name="DEV_SCAT_EZX10RF"/>
 		<nodeSubCategory id="15" name="DEV_SCAT_EZX10IR"/>
 	</nodeCategory>
+
+<!-- updated Category 4. This one is a little strange because this is an irrigation category, -->
+<!-- but the ISY folks overlay ZWave devices in category 4 (you can see this in the 4_fam.xml -->
+<!-- file on the ISY. In order to slip these in without a major restructuring of the code in -->
+<!-- the plugin, I added 16 and 17 here.  This should not cause any problems as long as -->
+<!-- there is no subcategory 0 (or more irrigation things are supported on the ISY). The string -->
+<!-- in the "name" field is very important - the plugin strips out "DEV_SCAT_" and ships that -->
+<!-- over to Indigo to define the type of device.  You will find the 4.16 and 4.17 also hardwired -->
+<!-- in the plugin in parseOneDevice, which is the code that accepts or ignores any device attached -->
+<!-- to the ISY before shipping it over to the Indigo side.  If you find new ZWave devices -->
+<!-- that are 4.18.x.y or 4.something-else.x.y, you need to add them here, and also to -->
+<!-- parseOneDevice./jms/171220 -->
 	
 	<nodeCategory id="4" name="Irrigation">
 		<nodeSubCategory id="0" name="DEV_SCAT_COMPACTA_EZFLORA_SPRINKLER_CONTROLLER"/>
+		<nodeSubCategory id="16" name="DEV_SCAT_ZWAVE_RELAY"/>
+		<nodeSubCategory id="17" name="DEV_SCAT_ZWAVE_DIMMER"/>
 	</nodeCategory>
-	
+
+<!-- Updated category 5 to match ISY current info/jms/171220 -->	
 	<nodeCategory id="5" name="Climate">
-		<nodeSubCategory id="0" name="DEV_SCAT_BROAN_SMSC080_EXHAUST_FAN"/>
-		<nodeSubCategory id="1" name="DEV_SCAT_COMPACTA_EZTHERM"/>
-		<nodeSubCategory id="2" name="DEV_SCAT_BROAN_SMSC110_EXHAUST_FAN"/>
-		<nodeSubCategory id="3" name="DEV_SCAT_INSTEON_THERMOSTAT_ADAPTER"/>
-		<nodeSubCategory id="4" name="DEV_SCAT_COMPACTA_EZTHERMX"/>
-		<nodeSubCategory id="5" name="DEV_SCAT_BROAN_VENMAR_BEST"/>
-		<nodeSubCategory id="9" name="DEV_SCAT_INSTEON_THERMOSTAT_ADAPTER_SP"/>
-		<nodeSubCategory id="10" name="DEV_SCAT_INSTEON_THERMOSTAT_WIRELESS_2441ZTH"/>
-		<nodeSubCategory id="11" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2441TH"/>
-		<nodeSubCategory id="14" name="DEV_SCAT_INSTEON_THERMOSTAT_ADAPTER_2491T"/>
+                <nodeSubCategory id="0" name="DEV_SCAT_BROAN_SMSC080_EXHAUST_FAN"/>
+                <nodeSubCategory id="1" name="DEV_SCAT_COMPACTA_EZTHERM"/>
+                <nodeSubCategory id="2" name="DEV_SCAT_BROAN_SMSC110_EXHAUST_FAN"/>
+                <nodeSubCategory id="3" name="DEV_SCAT_INSTEON_THERMOSTAT_ADAPTER"/>
+                <nodeSubCategory id="4" name="DEV_SCAT_COMPACTA_EZTHERMX"/>
+                <nodeSubCategory id="5" name="DEV_SCAT_BROAN_VENMAR_BEST"/>
+                <nodeSubCategory id="9" name="DEV_SCAT_INSTEON_THERMOSTAT_ADAPTER_SP"/>
+                <nodeSubCategory id="10" name="DEV_SCAT_INSTEON_THERMOSTAT_WIRELESS_2441ZTH"/>
+                <nodeSubCategory id="11" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2441TH"/>
+                <nodeSubCategory id="14" name="DEV_SCAT_INSTEON_THERMOSTAT_ADAPTER_2491T"/>
+                <nodeSubCategory id="19" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2732_242"/>
+                <nodeSubCategory id="20" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2732_442"/>
+                <nodeSubCategory id="21" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2732_542"/>
+                <nodeSubCategory id="22" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2732_222_2"/>
+                <nodeSubCategory id="23" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2732_422_2"/>
+                <nodeSubCategory id="24" name="DEV_SCAT_INSTEON_THERMOSTAT_TEMPLINC_2732_522_2"/>
 	</nodeCategory>
 	
 	<nodeCategory id="6" name="Pool Control">
 		<nodeSubCategory id="0" name="DEV_SCAT_COMPACTA_EZPOOL"/>
 	</nodeCategory>
-	
+
+<!-- Updated category 7 to match ISY current info/jms/171220 -->
 	<nodeCategory id="7" name="Sensors and Actuators">
-		<nodeSubCategory id="0" name="DEV_SCAT_IO_LINC_2450"/>
-		<nodeSubCategory id="1" name="DEV_SCAT_COMPACTA_EZSENSE"/>
-		<nodeSubCategory id="2" name="DEV_SCAT_COMPACTA_EZIO_8T"/>
-		<nodeSubCategory id="3" name="DEV_SCAT_COMPACTA_EZIO"/>
-		<nodeSubCategory id="4" name="DEV_SCAT_COMPACTA_EZIO_8"/>
-		<nodeSubCategory id="5" name="DEV_SCAT_COMPACTA_EZSNS_RF"/>
-		<nodeSubCategory id="6" name="DEV_SCAT_COMPACTA_EZISNS_RF"/>
-		<nodeSubCategory id="7" name="DEV_SCAT_COMPACTA_EZIO_6I"/>
-		<nodeSubCategory id="8" name="DEV_SCAT_COMPACTA_EZIO_4O"/>
-		<nodeSubCategory id="9" name="DEV_SCAT_SYNCHRO_LINC"/>
+                <nodeSubCategory id="0" name="DEV_SCAT_IO_LINC_2450"/>
+                <nodeSubCategory id="1" name="DEV_SCAT_COMPACTA_EZSENSE"/>
+                <nodeSubCategory id="2" name="DEV_SCAT_COMPACTA_EZIO_8T"/>
+                <nodeSubCategory id="3" name="DEV_SCAT_COMPACTA_EZIO"/>
+                <nodeSubCategory id="4" name="DEV_SCAT_COMPACTA_EZIO_8"/>
+                <nodeSubCategory id="5" name="DEV_SCAT_COMPACTA_EZSNS_RF"/>
+                <nodeSubCategory id="6" name="DEV_SCAT_COMPACTA_EZISNS_RF"/>
+                <nodeSubCategory id="7" name="DEV_SCAT_COMPACTA_EZIO_6I"/>
+                <nodeSubCategory id="8" name="DEV_SCAT_COMPACTA_EZIO_4O"/>
+                <nodeSubCategory id="9" name="DEV_SCAT_SYNCHRO_LINC"/>
+                <nodeSubCategory id="13" name="DEV_SCAT_REF_IO_LINC_2450"/>
 	</nodeCategory>
 	
 	<nodeCategory id="9" name="Energy Management">
@@ -173,9 +218,12 @@
 		<nodeSubCategory id="13" name="DEV_SCAT_ENERGY_DISPLAY_2448A2"/>
 	</nodeCategory>
 	
-
+<!-- Updated category 14 to match ISY current info/jms/171220 -->
 	<nodeCategory id="14" name="Windows/Shades">
-		<nodeSubCategory id="0" name="DEV_SCAT_SOMFY_DRAPE_CONTROLLER_RF"/>
+                <nodeSubCategory id="0" name="DEV_SCAT_SOMFY_DRAPE_CONTROLLER_RF"/>
+                <nodeSubCategory id="1" name="DEV_SCAT_MICRO_MODULE_OPEN_CLOSE_2444_222"/>
+                <nodeSubCategory id="2" name="DEV_SCAT_MICRO_MODULE_OPEN_CLOSE_2444_422"/>
+                <nodeSubCategory id="3" name="DEV_SCAT_MICRO_MODULE_OPEN_CLOSE_2444_522"/>
 	</nodeCategory>
 	
 	<nodeCategory id="15" name="Access Control/Doors/Locks">
@@ -185,16 +233,16 @@
 		<nodeSubCategory id="3" name="DEV_SCAT_WEILAND_ELEVATION_DRIVE"/>
 		<nodeSubCategory id="6" name="DEV_SCAT_MORNING_LINC"/>
 	</nodeCategory>
-	
+
+<!-- Updated category 16 to match ISY current info/jms/171220 -->
 	<nodeCategory id="16" name="Security/Health/Safety">
-		<nodeSubCategory id="1" name="DEV_SCAT_MOTION_SENSOR_2420M"/>
-		<nodeSubCategory id="2" name="DEV_SCAT_TRIGGER_LINC_2421"/>
-		<nodeSubCategory id="3" name="DEV_SCAT_MOTION_SENSOR_2420M_SP"/>
-		<nodeSubCategory id="8" name="DEV_SCAT_LEAK_SENSOR_2852_222"/>
-		<nodeSubCategory id="9" name="DEV_SCAT_OPEN_CLOSE_SENSOR_2843_222"/>
-		<nodeSubCategory id="10" name="DEV_SCAT_SMOKE_SENSOR"/>
-		
-		
+                <nodeSubCategory id="1" name="DEV_SCAT_MOTION_SENSOR_2420M"/>
+                <nodeSubCategory id="2" name="DEV_SCAT_TRIGGER_LINC_2421"/>
+                <nodeSubCategory id="3" name="DEV_SCAT_MOTION_SENSOR_2420M_SP"/>
+                <nodeSubCategory id="8" name="DEV_SCAT_LEAK_SENSOR_2852_222"/>
+                <nodeSubCategory id="9" name="DEV_SCAT_OPEN_CLOSE_SENSOR_2843_222"/>
+                <nodeSubCategory id="10" name="DEV_SCAT_SMOKE_SENSOR"/>
+                <nodeSubCategory id="17" name="DEV_SCAT_DOOR_SENSOR_2845_222"/>
 	</nodeCategory>
 	
 	<nodeCategory id="113" name="A10/X10 Nodes">

@@ -102,11 +102,14 @@ class Plugin(indigo.PluginBase):
 	###########################
 
 	def deviceStartComm(self, dev):
+		# This is called for each device that is ours, but we only pay attention if it is the ISY
+		# device itself.  All of "our" other devices are just ignored (with the return below)
 		self.debugLog('<<----called: deviceStartComm:  %s' % dev.name)
 		if dev.deviceTypeId != 'ISY': return
 		
 		dev.updateStateOnServer('badNodesList', '[]')
 		pluginProps = dev.pluginProps
+		#self.debugLog("pluginprops are %s" % pluginProps)
 		
 		# Added flag to the props for this device that will allow us to do
 		# the initial load of devices, scenes, and programs when an ISY Controller
@@ -119,8 +122,10 @@ class Plugin(indigo.PluginBase):
 			dev.replacePluginPropsOnServer(pluginProps)
  		
  		# create index of devices and initialize subscription server
+		#self.debugLog('deviceStartComm: Setting up deviceDict, then dumping it.')
 		deviceDict = dict([(device.address, device) for device in indigo.devices if device.pluginId == self.pluginId
 			and device.deviceTypeId != 'ISY' and device.pluginProps['ISYuuid'] == pluginProps['ISYuuid']])
+		#self.debugLog(deviceDict)
 		subscriptionServer = SubscriptionServer(self, dev, deviceDict)
 
 		# pass the port to the Subscription Manager and start it
@@ -224,6 +229,7 @@ class Plugin(indigo.PluginBase):
 		# create, update or delete indigo devices for ISY Insteon devices
 		ISYDevices = self.deviceController.getDevices(ISYIP, pluginProps['authorization'])
 		self.debugLog("ISYDevices:\n%s" % str(ISYDevices))
+		self.debugLog("jms/end of ISYDevices")
 
 		existingDevices = [device for device in indigo.devices
 			if device.pluginId == self.pluginId and device.pluginProps['ISYuuid'] == ISYuuid
@@ -260,6 +266,9 @@ class Plugin(indigo.PluginBase):
 				indigo.device.delete(existingDevice.id)
 
 		# add devices if necessary
+		# jms/171220 - added a number of properties, including ISYmaxBrightness and ISYtype, so
+		# that we can "know" more about the device when we come back to handling it when we get
+		# an event.  Fortunately, Indigo is great about letting us store junk in their database.
 		for device in ISYDevices:
 			self.debugLog('creating device: %s' % device['name'])
 			pDev = indigo.device.create(protocol=indigo.kProtocol.Plugin,
@@ -269,8 +278,9 @@ class Plugin(indigo.PluginBase):
 				name=self.getName(device['name']),
 				deviceTypeId=device['type'],
 				description=device['description'],
-				props={'ISYuuid':ISYuuid, 'address':device['address'], 'ShowCoolHeatEquipmentStateUI':True},
-				folder=folderId)
+				props={'ISYuuid':ISYuuid, 'address':device['address'], 'ISYtype':device['type'], 
+				 'ISYmaxBrightness':device['maxBrightness'], 'ShowCoolHeatEquipmentStateUI':True},
+				 folder=folderId)
 
 	def updateISYScenes(self, dev):
 		ISYIP = dev.address
@@ -374,7 +384,7 @@ class Plugin(indigo.PluginBase):
 			indigo.server.log('[%s Event Viewer]: %s' % (ISY.name, eventInfo))
 		elif self.eventViewer == 'highlight':
 			self.errorLog('[%s Event Viewer]: %s' % (ISY.name, eventInfo))
-		
+
 	def queryDevice(self, ISY, address):
 		self.deviceController.queryStatus(ISY.address, ISY.pluginProps['authorization'], address)
 
@@ -507,12 +517,19 @@ class Plugin(indigo.PluginBase):
 		pluginProps = dev.pluginProps
 		address = pluginProps['address']
 		ISYuuid = pluginProps['ISYuuid']
+		ISYtype = pluginProps['ISYtype']
+		ISYmaxBrightness = pluginProps['ISYmaxBrightness']
 		ISYIP = self.lookupTable[ISYuuid]['ISYIP']
+		self.debugLog("In actionControlDimmerRelay/jms")
+		self.debugLog("address %s ISYuuid %s ISYtype %s ISYIP %s" % (address, ISYuuid, ISYtype, ISYIP))
 		authorization = self.lookupTable[ISYuuid]['authorization']
 
 		###### TURN ON ######
 		if action.deviceAction == indigo.kDeviceAction.TurnOn:
-			self.deviceController.deviceOn(ISYIP, authorization, address)
+			if ISYtype == 'ISYRelay':
+				self.deviceController.deviceOn(ISYIP, authorization, address)
+			else:
+				self.deviceController.deviceOnDimmer(ISYIP, authorization, address, ISYmaxBrightness)
 
 		###### TURN OFF ######
 		elif action.deviceAction == indigo.kDeviceAction.TurnOff:
@@ -527,19 +544,19 @@ class Plugin(indigo.PluginBase):
 
 		###### SET BRIGHTNESS ######
 		elif action.deviceAction == indigo.kDeviceAction.SetBrightness:
-			self.deviceController.deviceSetBrightness(ISYIP, authorization, address, action.actionValue)
+			self.deviceController.deviceSetBrightness(ISYIP, authorization, address, action.actionValue, ISYmaxBrightness)
 				
 		###### BRIGHTEN BY ######
 		elif action.deviceAction == indigo.kDeviceAction.BrightenBy:
 			currentBrightness = int(dev.states['brightnessLevel'])
 			newBrightness = currentBrightness + int(action.actionValue)
-			self.deviceController.deviceSetBrightness(ISYIP, authorization, address, newBrightness)
+			self.deviceController.deviceSetBrightness(ISYIP, authorization, address, newBrightness, ISYmaxBrightness)
 
 		###### DIM BY ######
 		elif action.deviceAction == indigo.kDeviceAction.DimBy:
 			currentBrightness = int(dev.states['brightnessLevel'])
 			newBrightness = currentBrightness - int(action.actionValue)
-			self.deviceController.deviceSetBrightness(ISYIP, authorization, address, newBrightness)
+			self.deviceController.deviceSetBrightness(ISYIP, authorization, address, newBrightness, ISYmaxBrightness)
 			
 		###### STATUS REQUEST ######
 #		elif action.deviceAction == indigo.kDeviceAction.RequestStatus:
