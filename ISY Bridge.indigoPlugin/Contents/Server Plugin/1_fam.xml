@@ -156,7 +156,7 @@
 <!-- file on the ISY. In order to slip these in without a major restructuring of the code in -->
 <!-- the plugin, I added 16 and 17 here.  This should not cause any problems as long as -->
 <!-- there is no subcategory 0 (or more irrigation things are supported on the ISY). The string -->
-<!-- in the "name" field is very important---the plugin strips out "DEV_SCAT_" and ships that -->
+<!-- in the "name" field is very important - the plugin strips out "DEV_SCAT_" and ships that -->
 <!-- over to Indigo to define the type of device.  You will find the 4.16 and 4.17 also hardwired -->
 <!-- in the plugin in parseOneDevice, which is the code that accepts or ignores any device attached -->
 <!-- to the ISY before shipping it over to the Indigo side.  If you find new ZWave devices -->

@@ -133,15 +133,21 @@ class SubscriptionServer(object):
 
 		self.conn.send('%s%s' % (soapHeaders, soapBody))
 
+# 
+# OK, so, basically, this is really bad code. When we are in XML-land, we should not be trying to rip
+# stuff out of the XML by hand.  However, the original code was doing this, and I have 
+# (perhaps unwisely) attempted to simply fix the manual extraction from XML by fixing some bugs
+# in the way that things are done.  Honestly, what should be done is this whole routine should be
+# ripped out and the miniXML parser in Python should be used to handle this.  But while we are 
+# waiting for someone to take that on, I will do the minimum fix needed.  I have left a bunch of
+# debugging lines in here, commented out, in case the next person wants to start debugging and
+# fixing this the "right" way./jms/171220
+
 	def extractFromXML(self, xml, tag):
 		elementList = xml.getElementsByTagName(tag)
-		#element = elementList[0]
-		#return element.nodeValue
-		#return ''.join( [node.data for node in element.childNodes] )
 		#self.debugLog('jms/in extractFromXML here is xml and elementList[0]')
 		#self.debugLog(xml)
 		#self.debugLog(elementList[0])
-		#return elementList[0].toxml().replace('<' + tag + '>','').replace('</' + tag + '>','')
 		element = elementList[0].toxml()
 		#self.debugLog("element is: %s" % element)
 		start = element.find('>') + 1
